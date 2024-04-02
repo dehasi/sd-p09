@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrant multi-machine sample setup
+
+# vagrant up
+# vagrant halt
+# vagrant destroy
+# vagrant list-commands
+
+# vagrant status
+# vagrant ssh gateway
+
+GB = 1024
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-23.10"
+
+  config.vm.provision "setup hosts", :type => "shell", :path => "scripts/0-setup-etc-hosts.sh"
+  config.vm.provision "install jdk", :type => "shell", :path => "scripts/1-install-jdk.sh"
+
+  config.vm.provision "copy file",  :type => "file", source: "scripts/file", destination: "~/file"
+  config.vm.provision "copy file2",  :type => "file", source: "scripts/file2", destination: "~/file2"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 1*GB
+    vb.cpus = 1
+  end
+
+  config.vm.define "gateway" do |node|
+    node.vm.network :private_network, ip: "10.0.0.2"
+    node.vm.hostname = "gateway"
+    node.vm.provision "copy Gateway",  :type => "file", source: "scripts/Gateway.java", destination: "~/Gateway.java"
+    node.vm.provision "start Gateway", :type => "shell", inline: "java Gateway.java 8080 cat cat-1:8080,cat-2:8080 lc lc-1:8080 > logs.log 2>&1  &"
+  end
+
+  config.vm.define "cat-1" do |node|
+    node.vm.network :private_network, ip: "10.0.0.3"
+    node.vm.hostname = "cat-1"
+    node.vm.provision "copy CatServer",  :type => "file", source: "scripts/CatServer.java", destination: "~/CatServer.java"
+    node.vm.provision "start CatServer", :type => "shell", inline: "java CatServer.java 8080 > logs.log 2>&1  &"
+  end
+
+  config.vm.define "cat-2" do |node|
+    node.vm.network :private_network, ip: "10.0.0.4"
+    node.vm.hostname = "cat-2"
+    node.vm.provision "copy CatServer",  :type => "file", source: "scripts/CatServer.java", destination: "~/CatServer.java"
+    node.vm.provision "start CatServer", :type => "shell", inline: "java CatServer.java 8080 > logs.log 2>&1  &"
+  end
+
+  config.vm.define "lc-1" do |node|
+    node.vm.network :private_network, ip: "10.0.0.5"
+    node.vm.hostname = "lc-1"
+    node.vm.provision "copy LCServer",  :type => "file", source: "scripts/LCServer.java", destination: "~/LCServer.java"
+    node.vm.provision "start LCServer", :type => "shell", inline: "java LCServer.java 8080 > logs.log 2>&1  &"
+  end
+end

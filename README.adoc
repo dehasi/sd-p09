@@ -1,1 +1,53 @@
 = Practice #7
+
+
+.plan
+* [ ] Vagrant
+* [ ] Read/Write filed, input/output streams
+* [ ] nc
+* [ ] sockets
+* [ ] curl
+* [ ] timeouts, retries
+
+.maybe
+* [ ] TCP
+* [ ] HTTP
+
+
+----
+netstat -r -n
+
+ifconfig en0
+
+arp -i en0  -a
+arp -n -i en0  -a
+
+
+cat /etc/resolv.conf
+cat /etc/hosts
+
+ping constructor.university
+
+nc -z constructor.university 80
+
+whois 35.246.184.45
+
+host constructor.university
+host www.constructor.university
+host -t A constructor.university
+host -t NS constructor.university
+host -t TXT constructor.university
+
+curl -i http://constructor.university
+curl https://constructor.university
+
+nc -C constructor.university 80
+----
+
+
+
+== Links
+* https://news.ycombinator.com/item?id=14950571 localhost problems with ipv6
+* https://developer.hashicorp.com/vagrant/tutorials/getting-started?product_intent=vagrant
+* https://www.rubykoans.com/ in case if you're interested in Ruby
+* https://www.postman.com/ smth like `curl` but with GUI

@@ -4,6 +4,7 @@ target/
 *.iws
 *.iml
 *.ipr
-
+.vagrant
+**/vagrant/scripts/*.java
 ### Mac OS ###
 .DS_Store
