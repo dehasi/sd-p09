@@ -2,12 +2,12 @@
 
 
 .plan
-* [ ] Vagrant
-* [ ] Read/Write filed, input/output streams
-* [ ] nc
-* [ ] sockets
+* [x] Vagrant
+* [x] Read/Write filed, input/output streams
+* [x] nc
+* [x] sockets
 * [ ] curl
-* [ ] timeouts, retries
+* [x] timeouts, retries
 
 .maybe
 * [ ] TCP
